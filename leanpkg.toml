@@ -1,0 +1,8 @@
+[package]
+name = "adventofcode"
+version = "0.1"
+lean_version = "leanprover-community/lean:3.35.1"
+path = "src"
+
+[dependencies]
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "cc60470635be24ae663643c46e178095a22e7833"}
