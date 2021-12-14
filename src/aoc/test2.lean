@@ -60,6 +60,6 @@ def main : io unit :=
   --put_str (to_string dayinput),
   let dd : list ℕ := map list.head dayinput,
   put_str (to_string dd),
-  put_str (to_string (sgn_diff_depth dd 200 )),
-  let ds:ℕ  := (cnt_true(sgn_diff_depth dd  200)),
-  put_str (to_string ds) 
+  put_str (to_string (sgn_diff_depth dd 0 )),
+  let ds:ℕ  := (cnt_true(sgn_diff_depth dd 0)),
+  put_str (to_string (ds-1)) 
