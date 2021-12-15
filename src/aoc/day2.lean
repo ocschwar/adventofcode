@@ -18,7 +18,7 @@ ch '-' >> ((λ x:ℕ, -x) <$> number)
 def letter : parser char := sat char.is_lower
 def Letter : parser char := sat char.is_upper
 
-
+def word : parser string := many_char (sat char.is_alpha)
 
 /- cribbed from io.fs.read_to_end and modified -/
 def parse_lines {α} (h : io.handle) (p : parser α) : io (list α) :=
@@ -34,12 +34,12 @@ def parse_file {α} (file : string) (p : parser α) : io (list α) :=
   do h ← io.mk_file_handle file io.mode.read ff,
      parse_lines h p
 
-
-def bool_to_nat : bool → ℕ 
-| tt := 1 
-| _ := 0 
-
-
-
 def map {α β : Type} (f : α → β) : list α → list β | [] := []
 | (x :: xs) := f x :: map xs
+
+structure position :=
+(distance : ℕ)
+(depth : ℕ)
+
+def main : io unit :=
+  do dayinput ← parse_file "day2.txt"  (many (word number <* ch '\n')) ,
