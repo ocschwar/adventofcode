@@ -43,30 +43,3 @@ def bool_to_nat : bool → ℕ
 
 def map {α β : Type} (f : α → β) : list α → list β | [] := []
 | (x :: xs) := f x :: map xs
-
-
-def sgn_diff_depth :(  list ℕ ) → ℕ    →  (list bool ) 
-  | [] a  := []
-  | (b :: l) a := (b > a) :: sgn_diff_depth l b
-
-  
-def cnt_true  (b: list bool) :  ℕ :=
-  (list.map bool_to_nat b).sum 
-
-def slide_window  :list ℕ → list ℕ  
-  | list.nil := []
-  | (a :: list.nil ) := []
-  | (a :: b :: list.nil) := []
-  | (a :: f :: e :: list.nil) := [ (a+f+e )]
-  | (a :: b :: c :: l ) := (a + b + c ):: slide_window (b::c ::l)
-
-
-#eval parse_file "day1.txt"  (many (number <* ch '\n')) 
-
-def main : io unit :=
-  do dayinput ← parse_file "day1.txt"  (many (number <* ch '\n')) ,
-  --put_str (to_string dayinput),
-  let dd : list ℕ := map list.head dayinput,
-  put_str (to_string dd),
-  let ds:ℕ  := (cnt_true(sgn_diff_depth (slide_window dd) 0)),
-  put_str (to_string (ds-1)) 
