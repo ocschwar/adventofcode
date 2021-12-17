@@ -98,6 +98,6 @@ def foo: list ( list instruction) → list instruction
 def main : io unit :=
   do dayinput ← parse_file "day2.txt" (many (given_inst <* ch '\n')) ,
   put_str_ln (to_string ( list.length dayinput)),
-  let dd : list instruction := list.foldl foo dayinput,
+  let dd : list instruction := map list.head dayinput,
   let pp :position := voyage (dd (position.mk 0 0 )),
   put_str_ln "done" 
