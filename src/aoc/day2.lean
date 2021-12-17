@@ -20,10 +20,14 @@ def Letter : parser char := sat char.is_upper
 
 def word : parser string := many_char (sat char.is_alpha)
 
-
+@[derive inhabited]
 structure position :=
 (distance : ℕ)
 (depth : ℕ)
+
+def mkstr  (p:position): string := 
+  (to_string (position.depth p)) ++ ", "  ++ to_string(position.distance p)
+@[derive inhabited]
 inductive comd : Type
 | up : comd
 | down : comd
@@ -34,6 +38,7 @@ def token : parser comd :=
 (str "down " $> comd.down) <|> 
 (str "forward " $> comd.forward)
 
+@[derive inhabited]
 structure instruction := 
 (comd : comd ) 
 (length : ℕ )
@@ -83,21 +88,13 @@ def move_position (p:position) (i:instruction ) : position :=
    ))
 
 -- todo: function that takes an instruction and a position and puts out a 
--- new positioon. 
--- and a parser. 
---def voyage (l : list instruction) (p:position) : position :=
 def voyage : list instruction → position → position 
 | [] p := p 
 | (i::l) p := voyage l (move_position p i )
 
-def foo: list ( list instruction) → list instruction
-| [] := []
-| (l::a) := l
-
--- then a mapper that will run it through a list. 
 def main : io unit :=
   do dayinput ← parse_file "day2.txt" (many (given_inst <* ch '\n')) ,
   put_str_ln (to_string ( list.length dayinput)),
   let dd : list instruction := map list.head dayinput,
-  let pp :position := voyage (dd (position.mk 0 0 )),
-  put_str_ln "done" 
+  let pp :position := voyage dd (position.mk 0 0 ),
+  put_str_ln (mkstr pp )
