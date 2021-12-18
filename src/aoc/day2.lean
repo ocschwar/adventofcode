@@ -20,10 +20,11 @@ def Letter : parser char := sat char.is_upper
 
 def word : parser string := many_char (sat char.is_alpha)
 
-@[derive inhabited]
+@[derive inhabited ]
 structure position :=
 (distance : ℕ)
 (depth : ℕ)
+(aim : ℤ ) 
 
 def mkstr  (p:position): string := 
   (to_string (position.depth p)) ++ ", "  ++ to_string(position.distance p)
@@ -41,7 +42,7 @@ def token : parser comd :=
 @[derive inhabited]
 structure instruction := 
 (comd : comd ) 
-(length : ℕ )
+(length : ℕ  )
 
 def given_inst : parser instruction := 
   instruction.mk <$> token <*> number
@@ -72,21 +73,40 @@ def parse_file {α} (file : string) (p : parser α) : io (list α) :=
 def map {α β : Type} (f : α → β) : list α → list β | [] := []
 | (x :: xs) := f x :: map xs
 
+#eval (-2:ℤ )* (1:ℕ )
+
 def move_position (p:position) (i:instruction ) : position :=
   position.mk ((position.distance p)+ 
   (match (instruction.comd i) with 
-     comd.forward := (instruction.length i),
+     comd.forward :=  ↑  ( instruction.length i)  ,
      comd.up := 0 ,
      comd.down := 0
   end 
   ))
-   ((match (instruction.comd i) with 
-     comd.forward := (position.depth p ),
-     comd.up :=  (position.depth p ) - (instruction.length i),
-     comd.down := (position.depth p ) + (instruction.length i)
-  end    
-   ))
-
+  (0 + 
+   (match (instruction.comd i) with 
+     comd.forward :=  match cmp (position.aim p) 0 with 
+     | ordering.eq := 0 
+     | ordering.gt := (position.depth p )+ ((position.aim p) * (instruction.length i))
+     | ordering.lt := (match (position.depth p) ((-position.aim p) * (instruction.length i)) with 
+        |ordering.gt := 0 
+        | ordering.eq := 0         
+        | ordering.lt := 0 
+        end )       
+      end
+      |comd.up:= 0
+      |comd.down:= 0
+      end))
+      (match (instruction.comd i) with 
+      | comd.forward := (position.aim p )
+      | comd.up := (position.aim p)+ (instruction.length i)
+      | comd.down := (position.aim p)- (instruction.length i)
+/-   ))((match (instruction.comd i) with 
+     comd.forward := (position.aim p ),-- + (position.aim p )* (instruction.length i),
+     comd.up :=  (position.aim p ) - (instruction.length i),
+     comd.down := (position.depth p )+ (instruction.length i)
+     end ))
+-/
 -- todo: function that takes an instruction and a position and puts out a 
 def voyage : list instruction → position → position 
 | [] p := p 
@@ -98,3 +118,10 @@ def main : io unit :=
   let dd : list instruction := map list.head dayinput,
   let pp :position := voyage dd (position.mk 0 0 ),
   put_str_ln (mkstr pp )
+
+--variable zzz : ℤ 
+--variable yy : ℕ 
+--variable xx : ℕ --, zzz : ℤ 
+--#eval  (1:ℕ ) + ↑ ( (-2:ℤ)*↑ (1:ℕ ):ℤ ):ℕ 
+--#check (-2:ℤ)*(1:ℕ )
+--#check (2:ℕ )* (↑ (2:ℤ ):ℕ )
