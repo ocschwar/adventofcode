@@ -20,7 +20,10 @@ dist' :: (Int,Int) -> Int
 dist' x = abs ( fst x - snd x )
 
 match' :: [Int] -> Int -> Int
-match' [] = error "Can't call head on an empty list, dummy!"
+match' x y  = do
+  let z = [ if xx == y then 1  else 0| xx <- x ]
+  let zz = y* sum z 
+  zz
 --match' (x:_) 
 
 
@@ -50,7 +53,5 @@ main = do
   let nums = map mkintlist pairs
   let a = Data.List.sort (map head' nums)
   let b = Data.List.sort (map scnd' nums)
-  let c = zip a b
-  let d = map dist' c 
-  let e =  Data.List.sum d -- reduce (+) d
-  print e
+  let e = map (\x -> match' b x) a 
+  print (sum e) 
