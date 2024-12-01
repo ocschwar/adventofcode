@@ -20,11 +20,7 @@ dist' :: (Int,Int) -> Int
 dist' x = abs ( fst x - snd x )
 
 match' :: [Int] -> Int -> Int
-match' x y  = do
-  let z = [ if xx == y then 1  else 0| xx <- x ]
-  let zz = y* sum z 
-  zz
---match' (x:_) 
+match' x y  = y * sum [ if xx == y then 1  else 0| xx <- x ]
 
 
 
