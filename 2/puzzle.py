@@ -1,6 +1,7 @@
 import sys
 import argparse
 import os
+import copy
 
 def main_1(args):
     L = open(args[1]).readlines()
@@ -38,28 +39,14 @@ def safe_report( report) :
     return ( 0 not in s and len(s) == 1 and m < 4)
 
 def safe_levels(report):
-    d = deriv(report)
-    s = list(map(sign,d))
-    m = list(map(abs,d))
-    if len(set(s)) == 1 and max(m) < 4 and 0 not in s:
+    if safe_report(report):
         return True
-    else:        
-        good_dir = (1 if s.count(1) > s.count(-1) else -1)
-        s = [ i == good_dir for i in s]
-        over = [ False if i>3 else True for i in m]
-        anded = [ x and y for (x,y) in zip(s,over)]        
-        print( """r{}
-        {}
-        {}
-        {}
-        {}""".format(report,d,s,over, anded))
-        if anded.count(False) == 1:
-            report.pop(anded.index(False))
-            print(report)
-            ret =  safe_report(report)
-        else:
-            ret = anded.count(False) == 0
-        print(ret)
+    for i in range( len(report)):
+        c = copy.copy(report)
+        c.pop(i)
+        if safe_report(c) :
+            return True
+    return False 
 def main(args):
     L = open(args[1]).readlines()
     reports = [ list(map(int, line.split())) for line in L]
