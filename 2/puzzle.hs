@@ -33,13 +33,15 @@ safe_report x = do
   let m = map abs d
   maximum(m)<4 && dirs
 
-safe_level x = do
-  let s = safe_report x
-  if s then 
-    True
-  else False
-
-
+safe_level :: [Int] -> Bool
+safe_level x =
+  foldl (||) (safe_report x)  [ safe_report ( remove i x ) | i  <- [0..length(x) -1]]
+     
+  
+--remove' :: Int -> [a] -> [a]
+--remove' xs = let remove n xs = let (as, bs) = splitAt n xs in as ++ tail bs
+remove :: Int -> [a] -> [a]
+remove n xs = let (as, bs) = splitAt n xs in as ++ tail bs
 
 main = do
   let list = []
@@ -51,7 +53,7 @@ main = do
   let safe = map safe_report nums
   let s = sum [ if xx then 1  else 0 | xx <- safe]
   print(s)
-
-
-
-
+  let safel = map safe_level nums
+  let sl = sum [  if xx then 1  else 0 | xx <- safel]
+  print(sl)
+--  print 
