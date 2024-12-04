@@ -15,7 +15,7 @@ def sign(n) :
         return -1
 
 def find_cadence(LL, i, j, c, phrase) :
-    print(len(LL), len(LL[i]), i,j,c,phrase)
+    #print(len(LL), len(LL[i]), i,j,c,phrase)
     if (c[0] != 0 and ( i+c[0]*len(phrase) > len(LL) or
          i + c[0]*len(phrase) < -1 )):
         return 0
@@ -24,7 +24,7 @@ def find_cadence(LL, i, j, c, phrase) :
         return 0
     test = ''.join([ LL[i+x*c[0]][j+x*c[1]] for x in range(len(phrase))])
     ret = (1 if test == phrase else 0 )
-    print(len(LL), len(LL[i]), i,j,c,phrase, test, ret)
+    #print(len(LL), len(LL[i]), i,j,c,phrase, test, ret)
     return ret
     
 
@@ -45,11 +45,11 @@ def find_x_mas(LL, i, j, phrase='MAS') :
 def main(args):
     LL = open(args[1]).readlines()
     s = 0 
-    #for i in range(len(LL)):
-    #    for j in range(len(LL[i])):
-    #        s += find_xmas(LL,i,j,'XMAS')
-    #    #break
-    #print(s)
+    for i in range(len(LL)):
+        for j in range(len(LL[i])):
+            s += find_xmas(LL,i,j,'XMAS')
+    
+    print(s)
     s = 0 
     for i in range(1, len(LL)-1):
         for j in range(1,len(LL[i])-1):
