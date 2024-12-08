@@ -19,3 +19,9 @@ macro_rules
 
 def match1 (xs : List Nat ) ( y: Nat) : Nat := 
   sum [ y | for a in xs, if a = y]
+--
+--def main  : IO Unit  :=
+-- let handle := openFile "input.txt"
+--  IO.println s!"Hello, {hello}!"
+
+ #eval match1 [1,2,3,4,5,4] 4
