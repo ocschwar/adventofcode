@@ -9,8 +9,8 @@ import math
 
 def solve_det( A, B , X):
     return (
-        math.floor(X[0]*B[1]-X[1]*B[0])/(A[0]*B[1]-A[1]*B[0]), 
-        math.floor(-X[0]*A[1]+X[1]*A[0])/(A[0]*B[1]-A[1]*B[0]), 
+        math.floor((X[0]*B[1]-X[1]*B[0])/(A[0]*B[1]-A[1]*B[0])), 
+        math.floor((-X[0]*A[1]+X[1]*A[0])/(A[0]*B[1]-A[1]*B[0])), 
         )
 
 def check_det(A,B,X,S):
