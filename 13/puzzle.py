@@ -38,32 +38,27 @@ def solve( A, B, X) :
         if top_b < 0 or 100 < a+top_b:
             return None
     return (a,top_b)
+
+RE = """Button A: X\+(\d+), Y\+(\d+)
+Button B: X\+(\d+), Y\+(\d+)
+Prize: X=(\d+), Y=(\d+)
+"""
     
 def main(args):
-    LL = list(map(str.rstrip,open(args[1]).readlines()))
-    I = len(LL)
-    J = len(LL[0])
-    # region size for each plot
-    RR = numpy.ones([I,J],dtype=int) * -1 
-    # fencing price for each plot. 
-    plants = set(list(functools.reduce(str.__add__,LL)))
-    print(plants, RR)
-    D = {}
-    nregions = 0 
-    for i in range(I):
-        for j in range(J):
-            ret =find_region(LL,(i,j),I,J,RR, nregions)
-            if ret:
-                pprint.pprint(("FF",RR,LL,ret))
-                nregions = ret[0]+1 
-                D[ret[0]] = {
-                    'size':ret[1],'pts':ret[2]}
-    for k,v in D.items():
-        sides = count_sides(LL, v['pts'], I, J,RR)
-        v['sides']=sides
-    pprint.pprint(D)
-    price = sum([v['size']*v['sides'] for v in D.values()])
-    print('price',price)
+    LL = open(args[1]).read()
+    L = re.findall(RE,LL)
+    ret = 0 
+    for r in L:
+        l = tuple(map(int,r))
+        print(l)
+        #S = solve_det((l[0],l[1]),(l[2],l[3]),(l[4],l[5]))
+        S = solve_det((l[0],l[1]),
+                      (l[2],l[3]),
+                      (10000000000000+l[4],10000000000000+l[5]))
+        if check_det((l[0],l[1]),(l[2],l[3]),
+                     (10000000000000+l[4],10000000000000+l[5]),S):
+            ret += 3*S[0] +S[1]
+    print(ret)
         
 if __name__ == "__main__":
     main(sys.argv)
