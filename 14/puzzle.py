@@ -22,21 +22,19 @@ def new_pos(P, V, n, I, J):
            (P[1] + n * V[1] )%J)
     return NP
 RE = "p=(-*\d+),(-*\d+) v=(-*\d+),(-*\d+)"
-QUADS = [ ((0,0), (49,51)) ,
-          ((51,0), (100,51)) ,
-          ((0,53), (49,102)) ,
-          ((51,53), (100,102)) ]
-def main(args):
-    LL = open(args[1]).read()
-    L = re.findall(RE,LL)
-    R = [ tuple(map(int,l)) for l in L]
-    p = [new_pos((r[0],r[1]),(r[2],r[3]),100,
-                 int(args[2]),
-                 int(args[3])) for r in R]
-    print(p)
+
+def display( P ,I,J ,i):
+    canvas = numpy.array([[' ']*I]*J, dtype=str)
+    for p in P:
+        #print(p, len(canvas), len(canvas[0]))
+        canvas[p[1]][p[0]] = '*'
+    print(i, "----------------------------------------------------")
+    print('\n'.join( [ ''.join(l) for l in canvas]))
+
+def score(p,I,J):
     Q = [0,0,0,0]
-    x = int(args[2]) // 2 
-    y = int(args[3]) // 2 
+    x = I // 2 
+    y = J // 2 
     for P in p:
         if P[0]< x :
             if P[1] < y:
@@ -49,6 +47,22 @@ def main(args):
             elif P[1] > y: 
                 Q[3] += 1
 
-    print(functools.reduce(int.__mul__,Q))
+    return(functools.reduce(int.__mul__,Q))
+    
+def main(args):
+    LL = open(args[1]).read()
+    L = re.findall(RE,LL)
+    R = [ tuple(map(int,l)) for l in L]
+    I = int(args[2])
+    J = int(args[3])
+    for i in range(11,10330,101):
+        p = [new_pos((r[0],r[1]),
+                     (r[2],r[3]),
+                     i,
+                     I,
+                     J) for r in R]
+        #print(i, score(p,I,J),len(p))
+        display(p,I,J,i)
+    #print(p)
 if __name__ == "__main__":
     main(sys.argv)
