@@ -1,0 +1,12 @@
+[package]
+name = "aoc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+vstd = "=0.0.0-2025-11-30-0053"
+serde = "*"
+docopt = "*"
+
+[package.metadata.verus]
+verify = true
