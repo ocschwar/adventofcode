@@ -23,10 +23,11 @@ def main(args):
         sign = dirs[l[0]]
         hits += move//100
         mod = move % 100
-        if sign == 1 and start + mod >= 100 :
-            hits+=1
-        elif sign == -1 and start - mod <= 0 :
-            hits += 1
+        if start > 0 : 
+            if sign == 1 and start + mod >= 100 :
+                hits+=1
+            elif sign == -1 and start - mod <= 0 :
+                hits += 1
         start += sign*move
         start %= 100 
     print(start, hits)
