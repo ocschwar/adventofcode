@@ -3,7 +3,6 @@ def sum (xs : List Nat) : Nat :=
   xs.foldl (init := 0) (·+·)
 
 
-
 declare_syntax_cat compClause
 syntax "for " term " in " term : compClause
 syntax "if " term : compClause
@@ -24,4 +23,4 @@ def match1 (xs : List Nat ) ( y: Nat) : Nat :=
 -- let handle := openFile "input.txt"
 --  IO.println s!"Hello, {hello}!"
 
- #eval match1 [1,2,3,4,5,4] 4
+#eval match1 [1,2,3,4,5,4] 4
