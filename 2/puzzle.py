@@ -1,6 +1,18 @@
 import sys
 import math
+"""
+This day is the perfect thing to port to Verus
+and require that it is formally verified.
 
+
+
+ensures match r!=0 {
+   true => { string_is_a_repeat},
+   false false { true}
+}
+
+then prove in Verus
+"""
 def invalid(s):
     l = len(s)
     if l%2 == 1 :
