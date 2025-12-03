@@ -1,13 +1,10 @@
 use vstd::prelude::*;
 
 verus! {
-//    extern crate serde;
-//    extern crate docopt;
     use std::io::BufRead;
     use serde::Deserialize;
-
     use std::fs::File;
-//    use docopt::Docopt;
+
 const USAGE: &'static str = "
 Usage: aoc [options] filename 
 
@@ -20,7 +17,9 @@ Options:
 	Plus,
 	Minus
     }
-    fn count_zero_landings( instructions:Vec<(Sign,u32)> ) -> Option<u32> {
+    fn count_zero_landings( instructions:Vec<(Sign,u32)> ) -> (r:Option<u32>)
+	ensures match r { Some(I) => I<instructions@.len(), None=>true}
+    {
 	let mut pos:u32 = 50;
 	let mut hits:u32 = 0 ;
 	for i in instructions {
@@ -50,7 +49,7 @@ Options:
 	for i in instructions {
 	    let mov = i.1;
 	    let sign = i.0;
-	    hits = hits.checked_add( mov/100)?;
+	    hits = hits.checked_add( mov/100)?;	    
 	    twit_3 = twit_3.checked_add( mov/100)?;
 	    let modulo = match sign {
 		Sign::Plus => mov % 100,
@@ -101,7 +100,6 @@ Options:
 		'L' => Sign::Minus,
 		_ => panic!("Bad direction")
 	    };
-//	    println!("Processing line: {}", l);
 	    let mov:u32 = l[1..].parse().expect("Bad number");
 	    instructions.push( (sign,mov) );
 	}
@@ -115,13 +113,20 @@ Options:
 		println!("Result: {}", res);
 	    }
 	}
-
-
-
-
-		
-		
 	assert(1 == 0 + 1);
     }
 
+
+    spec fn min(x: int, y: int) -> int {
+    if x <= y {
+        x
+    } else {
+        y
+    }
+}
+
+fn test() {
+    assert(min(10, 20) == 10); // succeeds
+    assert(min(100, 200) == 100); // succeeds
+}
 } // verus!
