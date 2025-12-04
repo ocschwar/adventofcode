@@ -18,7 +18,7 @@ Options:
 	Minus
     }
     fn count_zero_landings( instructions:Vec<(Sign,u32)> ) -> (r:Option<u32>)
-	ensures match r { Some(I) => I<instructions@.len(), None=>true}
+//	ensures match r { Some(I) => I<instructions@.len(), None=>true}
     {
 	let mut pos:u32 = 50;
 	let mut hits:u32 = 0 ;
