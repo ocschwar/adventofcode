@@ -71,28 +71,39 @@ verus! {
 	}
 
     }
-
     
     proof fn test(x:int, y:int)
 	ensures x+y==y+x
     {}
- #[verifier::external_body]
-fn merge_ranges(ranges:& Vec<Range>) -> (Vec<Range>,bool) {
+// #[verifier::external_body]
+    fn merge_ranges(ranges:& Vec<Range>) -> (Vec<Range>,bool)
+	ensures |merged:Vec<Range>, changed:bool| {
+	    // postcondition: all ranges in merged are non-overlapping
+	    forall|i:usize, j:usize| 0 <= i && i < merged.len() && 0 <= j && j < merged.len() && i != j ==> !merged[i@].overlap(merged[j@])
+	}
+
+    {
     let mut merged:Vec<Range> = Vec::new();
     let mut changed = false;
-    for r in ranges {
-	println!("Considering range: {:?}\n", r);
+    for r in ranges
+	invariant merged.len() <= ranges.len(),
+    
+    {
+
+//	println!("Considering range: {:?}\n", r);
 	let mut to_merge:Option<usize> = None;
-	for (i, mr) in merged.iter().enumerate() {
-	    println!("  Comparing to merged range: {:?}\n", mr);
+	let mut i = 0 ;
+	for mr in merged.iter() {
+//	    println!("  Comparing to merged range: {:?}\n", mr);
 	    if mr.overlap(*r) {
-		println!("found overlap between {:?} and {:?}\n", mr, r);
+//		println!("found overlap between {:?} and {:?}\n", mr, r);
 		to_merge = Some(i);
 		break;
 	    }
+	    i+=1;
 	}
 	if let Some(i) = to_merge {
-	    println!("  Merging with range: {:?}\n", merged[i]);
+//	    println!("  Merging with range: {:?}\n", merged[i]);
 	    let new_range = merged[i].merge(*r);
 	    merged[i] = new_range;
 	} else {
